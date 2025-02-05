@@ -8,6 +8,16 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
+// Añadir ruta GET para verificación de conexión
+app.get('/', (req, res) => {
+    res.json({ status: 'online', message: 'IKKA Backend is running' });
+});
+
+// Ruta para verificar estado
+app.get('/api/chat', (req, res) => {
+    res.json({ status: 'online' });
+});
+
 app.post('/api/chat', async (req, res) => {
     try {
         const { message } = req.body;
