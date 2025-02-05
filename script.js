@@ -2,6 +2,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatContainer = document.getElementById('chat-messages');
     const messageInput = document.getElementById('mensaje');
     const sendButton = document.getElementById('enviar');
+    const statusDiv = document.getElementById('connection-status');
+    
+    // Reemplaza esta URL con la que te dio ngrok
+    const API_URL = 'https://5373-2806-103e-13-4b4e-455b-2cf0-5179-7020.ngrok-free.app';
+    
+    // Verificar conexión al inicio
+    checkConnection();
+
+    async function checkConnection() {
+        try {
+            const response = await fetch(API_URL);
+            statusDiv.textContent = '🟢 Conectado';
+            statusDiv.style.color = '#4CAF50';
+        } catch (error) {
+            statusDiv.textContent = '🔴 Desconectado';
+            statusDiv.style.color = '#f44336';
+        }
+    }
 
     async function sendMessage() {
         const message = messageInput.value.trim();
@@ -12,8 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         messageInput.value = '';
 
         try {
-            const response = await fetch('https://TU-URL-DE-NGROK.ngrok.io/api/chat', {
-                // Reemplaza esta URL con la que te dio ngrok
+            const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
