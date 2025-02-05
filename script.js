@@ -5,16 +5,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusDiv = document.getElementById('connection-status');
     
     // Reemplaza esta URL con la que te dio ngrok
-    const API_URL = 'https://5373-2806-103e-13-4b4e-455b-2cf0-5179-7020.ngrok-free.app';
+    const API_BASE_URL = 'https://5373-2806-103e-13-4b4e-455b-2cf0-5179-7020.ngrok-free.app';
+    const API_CHAT_URL = `${API_BASE_URL}/api/chat`;
     
     // Verificar conexión al inicio
     checkConnection();
 
     async function checkConnection() {
         try {
-            const response = await fetch(API_URL);
-            statusDiv.textContent = '🟢 Conectado';
-            statusDiv.style.color = '#4CAF50';
+            const response = await fetch(`${API_BASE_URL}/api/chat`);
+            const data = await response.json();
+            if (data.status === 'online') {
+                statusDiv.textContent = '🟢 Conectado';
+                statusDiv.style.color = '#4CAF50';
+            }
         } catch (error) {
             statusDiv.textContent = '🔴 Desconectado';
             statusDiv.style.color = '#f44336';
@@ -30,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         messageInput.value = '';
 
         try {
-            const response = await fetch(API_URL, {
+            const response = await fetch(API_CHAT_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

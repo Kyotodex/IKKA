@@ -5,10 +5,21 @@ const fetch = require('node-fetch');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+// Configuración de CORS más permisiva
+app.use(cors({
+    origin: '*', // Permite todas las conexiones
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type']
+}));
+
 app.use(express.json());
 
-// Añadir ruta GET para verificación de conexión
+// Middleware para logging
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
+});
+
 app.get('/', (req, res) => {
     res.json({ status: 'online', message: 'IKKA Backend is running' });
 });
@@ -42,6 +53,16 @@ app.post('/api/chat', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor backend corriendo en http://localhost:${PORT}`);
+// Manejo de errores
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Algo salió mal!' });
+});
+
+// Cambiar el mensaje de inicio
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor backend corriendo en puerto ${PORT}`);
+    console.log(`Accesible vía:`);
+    console.log(`- Local: http://localhost:${PORT}`);
+    console.log(`- Red: http://0.0.0.0:${PORT}`);
 });
