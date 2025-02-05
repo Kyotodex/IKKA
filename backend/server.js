@@ -7,9 +7,13 @@ const PORT = process.env.PORT || 3001;
 
 // Configuración de CORS más permisiva
 app.use(cors({
-    origin: '*', // Permite todas las conexiones
+    origin: [
+        'http://IKKA.duckdns.org:3001',
+        'http://localhost:8000',
+        'http://localhost:3001'
+    ],
     methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type']
+    credentials: true
 }));
 
 app.use(express.json());
@@ -17,6 +21,16 @@ app.use(express.json());
 // Middleware para logging
 app.use((req, res, next) => {
     console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
+});
+
+// Añadir verificación básica de seguridad
+app.use((req, res, next) => {
+    const apiKey = req.headers['x-api-key'];
+    if (!apiKey || apiKey !== process.env.API_KEY) {
+        res.status(401).json({ error: 'No autorizado' });
+        return;
+    }
     next();
 });
 

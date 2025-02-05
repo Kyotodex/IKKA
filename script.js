@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendButton = document.getElementById('enviar');
     const statusDiv = document.getElementById('connection-status');
     
-    // Reemplaza esta URL con la que te dio ngrok
-    const API_BASE_URL = 'https://5373-2806-103e-13-4b4e-455b-2cf0-5179-7020.ngrok-free.app';
+    // Cambiar a tu dominio permanente de ngrok
+    const API_BASE_URL = 'http://ikka.duckdns.org:3001';
     const API_CHAT_URL = `${API_BASE_URL}/api/chat`;
     
     // Verificar conexión al inicio
